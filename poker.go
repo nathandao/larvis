@@ -88,8 +88,8 @@ func calculateResult(firstHand string, secondHand string) result {
 	firstHandComponents := getSortedComponents(firstHand)
 	secondHandComponents := getSortedComponents(secondHand)
 
-	// Below is a list of all possible combinations and their respective
-	// "sorted components". Each row is a set of identical cards.
+	// Below is a list of all possible combinations and their respective "sorted components".
+	// Each row is a set of identical cards.
 	//
 	//               4 of    full           two    one   high
 	//  Combo        a kind  house  triple  pairs  pair  card
