@@ -1,6 +1,6 @@
 # Larvis
 
-Your trusted poker solver. Larvis takes in 2 poker hands, each has 5 cards from this deck [1 2 3 4 5 6 7 8 9 T J K Q A], and it will try to find the winner.
+Your trusted poker solver. Larvis takes in 2 poker hands, each has 5 cards from this deck [2 3 4 5 6 7 8 9 T J K Q A], and it will try to find the winner.
 
 ## Prerequisite
 
