@@ -21,7 +21,7 @@ These dependencies would needed to be installed on your machine in order to deve
 
 To build larvis locally:
 
-```bash
+```shell
 # Build larvis locally on your machine. The binary will be available at ./build/larvis
 make build
 
@@ -31,7 +31,7 @@ make build
 
 And to run the local build:
 
-```bash
+```shell
 ./build/larvis FIRST_HAND SECOND_HAND
 ```
 
@@ -39,7 +39,7 @@ And to run the local build:
 
 To build the docker image:
 
-```bash
+```shell
 # Build larvis locally on your machine. The binary will be available at ./build/larvis
 make build-docker
 
@@ -49,7 +49,7 @@ make build-docker
 
 And to run larvis in docker:
 
-```bash
+```shell
 docker run -it larvis:local larvis FIRST_HAND SECOND_HAND
 
 # or you can also ssh into the docker image,
@@ -61,7 +61,7 @@ docker run -it larvis:local /bin/sh
 
 Some extra useful commands during development:
 
-```bash
+```shell
 make test
 
 make lint # requires golangci-lint to be installed
