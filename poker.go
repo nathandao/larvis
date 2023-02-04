@@ -83,7 +83,7 @@ func validateHand(hand string) error {
 func getSortedComponents(hand string) []string {
 	hand = sanitizeHand(hand)
 	// Regex to match 1 or more repeating cards. Assuming cards are uppercase and sorted.
-	comboRegex = `2{1,}|3{1,}|4{1,}|5{1,}|6{1,}|7{1,}|8{1,}|9{1,}|T{1,}|J{1,}|Q{1,}|K{1,}|A{1,}`
+	comboRegex := `2{1,}|3{1,}|4{1,}|5{1,}|6{1,}|7{1,}|8{1,}|9{1,}|T{1,}|J{1,}|Q{1,}|K{1,}|A{1,}`
 	components := regexp.MustCompile(comboRegex).FindAllString(hand, -1)
 
 	sort.Slice(components, func(i, j int) bool {
