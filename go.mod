@@ -1,4 +1,4 @@
-module larvis
+module github.com/nathandao/larvis
 
 go 1.20
 

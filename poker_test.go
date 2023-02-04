@@ -59,8 +59,8 @@ func TestGetSortedComponents(t *testing.T) {
 		{hand: "24AA7", expectedResult: []string{"AA", "7", "4", "2"}},
 		{hand: "88AA7", expectedResult: []string{"AA", "88", "7"}},
 		{hand: "777AA", expectedResult: []string{"777", "AA"}},
-		{hand: "777TA", expectedResult: []string{"777", "A", "T"}},
-		{hand: "7777A", expectedResult: []string{"7777", "A"}},
+		{hand: "7TA77", expectedResult: []string{"777", "A", "T"}},
+		{hand: "7A777", expectedResult: []string{"7777", "A"}},
 	}
 
 	for _, testCase := range testCases {
@@ -75,12 +75,12 @@ func TestGetComboType(t *testing.T) {
 		hand           string
 		expectedResult comboType
 	}{
-		{hand: "7TAJ2", expectedResult: highCards},
+		{hand: "7TAJ2", expectedResult: highCard},
 		{hand: "24AA7", expectedResult: onePair},
 		{hand: "88AA7", expectedResult: twoPairs},
-		{hand: "777AA", expectedResult: fullHouse},
-		{hand: "777TA", expectedResult: triple},
-		{hand: "7777A", expectedResult: fourOfAKind},
+		{hand: "7A7A7", expectedResult: fullHouse},
+		{hand: "7T77A", expectedResult: triple},
+		{hand: "7A777", expectedResult: fourOfAKind},
 	}
 
 	for _, testCase := range testCases {

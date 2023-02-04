@@ -22,7 +22,7 @@ const (
 	twoPairs    comboType = "TwoPairs"
 	triple      comboType = "Triple"
 	onePair     comboType = "OnePair"
-	highCards   comboType = "HighCards"
+	highCard    comboType = "HighCard"
 
 	// Regex to match 1 or more repeating cards. Assuming cards are uppercase and sorted.
 	comboRegex = `2{1,}|3{1,}|4{1,}|5{1,}|6{1,}|7{1,}|8{1,}|9{1,}|T{1,}|J{1,}|Q{1,}|K{1,}|A{1,}`
@@ -30,7 +30,7 @@ const (
 
 var (
 	cardRank  = []string{"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"}
-	comboRank = []comboType{highCards, onePair, twoPairs, triple, fullHouse, fourOfAKind}
+	comboRank = []comboType{highCard, onePair, twoPairs, triple, fullHouse, fourOfAKind}
 )
 
 // getComboRank returns the index of the combo type in the comboRank slice. Higher index means a stronger combo.
@@ -41,6 +41,16 @@ func getComboRank(combo comboType) int {
 // getCardRank returns the index of the index of the card int the cardRank slice. Higher index means a stronger card.
 func getCardRank(card string) int {
 	return slices.Index(cardRank, card)
+}
+
+// sanitizeHand returns the poker hand as uppercased, and sorted from higher to lower ranked cards.
+func sanitizeHand(hand string) string {
+	hand = strings.ReplaceAll(strings.ToUpper(hand), " ", "")
+	cards := strings.Split(hand, "")
+	sort.Slice(cards, func(i, j int) bool {
+		return getCardRank(cards[i]) > getCardRank(cards[j])
+	})
+	return strings.Join(cards, "")
 }
 
 // validateHand returns any error related to the poker hand input.
@@ -68,22 +78,13 @@ func validateHand(hand string) error {
 	return nil
 }
 
-// sanitizeHand returns the poker hand as uppercased, and sorted from higher to lower ranked cards.
-func sanitizeHand(hand string) string {
-	hand = strings.ReplaceAll(strings.ToUpper(hand), " ", "")
-	cards := strings.Split(hand, "")
-	sort.Slice(cards, func(i, j int) bool {
-		return getCardRank(cards[i]) > getCardRank(cards[j])
-	})
-	return strings.Join(cards, "")
-}
-
 // getSortedComponents returns a sorted slice of the poker hand components.
-// Each component is either a string with of same card, or a single card.
-// The slice of components is sorted descendingly, first by repeated card length, and then by card rank
-// if the repeat lengths are equal.
+// Each component is either a string of combo cards, or a single card.
+// The slice of components is sorted descendingly, first by combo card length, and
+// then by card rank if the combo lengths are equal.
 // Examples: []string{"AA", "44", "6"} or []string{"222", "AA"} or []string{"A", "Q", "T", "4", "2"}
 func getSortedComponents(hand string) []string {
+	hand = sanitizeHand(hand)
 	components := regexp.MustCompile(comboRegex).FindAllString(hand, -1)
 
 	sort.Slice(components, func(i, j int) bool {
@@ -118,15 +119,12 @@ func getComboType(hand string) comboType {
 	case comboCount[2] == 1:
 		return onePair
 	default:
-		return highCards
+		return highCard
 	}
 }
 
 // calculateResult returns the result of the winner or if it's a tie.
 func calculateResult(firstHand string, secondHand string) result {
-	firstHand = sanitizeHand(firstHand)
-	secondHand = sanitizeHand(secondHand)
-
 	firstHandComboRank := getComboRank(getComboType(firstHand))
 	secondHandComboRank := getComboRank(getComboType(secondHand))
 
@@ -146,7 +144,6 @@ func calculateResult(firstHand string, secondHand string) result {
 	// Since both hands have the same combo type, and the components slice are aready sorted by rank, the winner is then
 	// decided by iterating through the ranked component slice, and whoever has the stronger component first is the winner.
 	for i, component := range firstHandComponents {
-		// Both components are strings of repeated cards of the same length (or a single card), compare them using the first character.
 		component1Rank := slices.Index(cardRank, component[:1])
 		component2Rank := slices.Index(cardRank, secondHandComponents[i][:1])
 
@@ -161,6 +158,6 @@ func calculateResult(firstHand string, secondHand string) result {
 		return hand2Wins
 	}
 
-	// It's a tie of all sorted components are equal
+	// It's a tie if all components are equal
 	return tie
 }
