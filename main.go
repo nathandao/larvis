@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 )
@@ -23,7 +22,7 @@ func exitWithError(err error) {
 // validateArguments checks if exactly 2 poker hands are provided.
 func validateArguments(pokerHands []string) error {
 	if len(pokerHands) < 2 {
-		return errors.New("urg, I need more data. Please input 2 poker hands")
+		return fmt.Errorf("urg, %d poker hand was given. Please input 2 poker hands", len(pokerHands))
 	}
 
 	if len(pokerHands) > 2 {

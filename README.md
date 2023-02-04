@@ -1,6 +1,12 @@
 # Larvis
 
-Your trusted poker solver. Larvis takes in 2 poker hands, each has 5 cards from this deck [2 3 4 5 6 7 8 9 T J K Q A], and it will try to find the winner.
+Your trusted poker solver.
+Larvis takes in 2 poker hands, each has 5 cards from this deck [2 3 4 5 6 7 8 9 T J K Q A], and it will try to find the winner.
+
+Example:
+```
+larvis AATJ8 33322
+```
 
 ## Prerequisite
 
@@ -49,4 +55,14 @@ docker run -it larvis:local larvis FIRST_HAND SECOND_HAND
 # or you can also ssh into the docker image,
 # and `larvis` command should be available in the terminal session
 docker run -it larvis:local /bin/sh
+```
+
+## Development
+
+Some extra useful commands during development:
+
+```bash
+make test
+
+make lint # requires golangci-lint to be installed
 ```

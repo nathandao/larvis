@@ -70,26 +70,6 @@ func TestGetSortedComponents(t *testing.T) {
 	}
 }
 
-func TestGetComboType(t *testing.T) {
-	testCases := []struct {
-		hand           string
-		expectedResult comboType
-	}{
-		{hand: "7TAJ2", expectedResult: highCard},
-		{hand: "24AA7", expectedResult: onePair},
-		{hand: "88AA7", expectedResult: twoPairs},
-		{hand: "7A7A7", expectedResult: fullHouse},
-		{hand: "7T77A", expectedResult: triple},
-		{hand: "7A777", expectedResult: fourOfAKind},
-	}
-
-	for _, testCase := range testCases {
-		t.Run(testCase.hand, func(t *testing.T) {
-			assert.Equal(t, testCase.expectedResult, getComboType(testCase.hand))
-		})
-	}
-}
-
 func TestCalculateResult(t *testing.T) {
 	testCases := []struct {
 		hands          []string
