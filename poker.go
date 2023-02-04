@@ -71,6 +71,7 @@ func getSortedComponents(hand string) []string {
 	comboRegex := `2{1,}|3{1,}|4{1,}|5{1,}|6{1,}|7{1,}|8{1,}|9{1,}|T{1,}|J{1,}|Q{1,}|K{1,}|A{1,}`
 	components := regexp.MustCompile(comboRegex).FindAllString(hand, -1)
 
+	// Sort components by combo length and card rank
 	sort.Slice(components, func(i, j int) bool {
 		if len(components[i]) != len(components[j]) {
 			return len(components[i]) > len(components[j])
@@ -90,27 +91,26 @@ func calculateResult(firstHand string, secondHand string) result {
 	// Below is a list of all possible combinations and their respective
 	// "sorted components". Each row is a set of identical cards.
 	//
-	//              4 of    full           two    one   high
-	// Combo        a kind  house  triple  pairs  pair  card
-	//=========================================================
-	// Components   ||||    |||    |||     ||      ||     |
-	//              |       ||     |       ||      |      |
-	//         	               |       |       |      |
-	//                                             |      |
-	//                                                    |
+	//               4 of    full           two    one   high
+	//  Combo        a kind  house  triple  pairs  pair  card
+	// =======================================================
+	//  Components   ||||    |||    |||     ||      ||     |
+	//               |       ||     |       ||      |      |
+	//         	                |       |       |      |
+	//                                              |      |
+	//                                                     |
 	//
 	// From this table, it's easy to see that there are 2 cases when comparing 2 hands:
 	//
-	// - 2 hands have different amount of components: then the hand with least row
-	//   of components wins.
+	// - 2 hands have different amount of component rows: then the hand with least row wins.
 	//
-	// - 2 hands have the same number of rows: Since component row within each hand
-	//   are already sorted from stronger to weaker by `getSortedComponents`, all we
-	//   need to do is compare rows from the same index with each other. The stronger
-	//   row is one that is longer (has more idential cards), or in case of equal
-	//   lengths, card rank can be compared. The iteration ends immediately once the
-	//   a winning row is found, since all later rows can't affect the result.
-	//   If no winning row is found when all rows were iterated, then it's a tie.
+	// - 2 hands have the same number of rows: Since component row within each hand are
+	//   already sorted from stronger to weaker by `getSortedComponents`, all we need to do
+	//   is compare rows from the same index with each other. The stronger row is one that
+	//   is longer (has more idential cards), or in case of equal lengths, card rank can be
+	//   compared. The iteration ends immediately once the a winning row is found, since all
+	//   later rows can't affect the result. If no winning row is found when all rows were
+	//   iterated, then it's a tie.
 
 	// Compare by component length
 	if len(firstHandComponents) < len(secondHandComponents) {
@@ -121,7 +121,7 @@ func calculateResult(firstHand string, secondHand string) result {
 		return hand2Wins
 	}
 
-	// If number of rows are equal, compare by rows
+	// If number of rows are equal, compare by iterarting rows
 	for i, row1 := range firstHandComponents {
 		row2 := secondHandComponents[i]
 
@@ -138,17 +138,15 @@ func calculateResult(firstHand string, secondHand string) result {
 		row1CardRank := slices.Index(cardRank, row1[:1])
 		row2CardRank := slices.Index(cardRank, row2[:1])
 
-		if row1CardRank == row2CardRank {
-			continue
-		}
-
 		if row1CardRank > row2CardRank {
 			return hand1Wins
 		}
 
-		return hand2Wins
+		if row1CardRank < row2CardRank {
+			return hand2Wins
+		}
 	}
 
-	// It's a tie if all components are equal
+	// It's a tie if all component rows are equal
 	return tie
 }
