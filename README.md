@@ -66,3 +66,11 @@ make test
 
 make lint # requires golangci-lint to be installed
 ```
+
+## Libaries used
+
+- [testify](https://github.com/stretchr/testify): make use of the `assert` method that helps defining test assertions quicker and make
+  tests more readable.
+- [slices](https://pkg.go.dev/golang.org/x/exp@v0.0.0-20230203172020-98cc5a0785f9/slices): provides some nicer methods to sort slices.
+  Although this is a part of the experimental golang repo, I thought this is a small enough project that it should be ok to try out the
+  module here.
